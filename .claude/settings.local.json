@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"D:\\\\KEIL5-51\\\\My project 32\\\\smallcar\\\\smallcar\\\\NET\\\\onenet\\\\src\\\\onenet.c\"\\); Write-Output \"First 20 bytes:\"; $bytes[0..19] | ForEach-Object { $_.ToString\\(\"X2\"\\) }; Write-Output \"=== Also check '逆时针旋转' ===\"; $text = [System.Text.Encoding]::UTF8.GetString\\($bytes\\); $idx = $text.IndexOf\\(\"逆时针旋转\"\\); $byteIdx = [System.Text.Encoding]::UTF8.GetByteCount\\($text.Substring\\(0, $idx\\)\\); for\\($i=-3; $i -lt 25; $i++\\) { $pos = $byteIdx+$i; if\\($pos -ge 0 -and $pos -lt $bytes.Length\\) { Write-Output \\($pos.ToString\\(\"X4\"\\) + \": \" + $bytes[$pos].ToString\\(\"X2\"\\)\\) } })",
+      "Read(//d/STM32Cube_project/**)",
+      "Bash(ls -la \"D:\\\\\\\\STM32Cube project\\\\\\\\robot\")",
+      "Bash(ls -la \"/d/STM32Cube\"*)",
+      "Bash(find /d -maxdepth 3 -name \"*.uvprojx\")",
+      "Bash(mount)",
+      "Bash(python3 *)",
+      "Read(//c/Users/33711/AppData/Local/Programs/Python//**)",
+      "Read(//c/Users/33711/AppData/Local/Microsoft/WindowsApps/**)",
+      "Bash(py *)",
+      "Bash(iconv --version)",
+      "Bash(xxd)",
+      "Bash(iconv -f gbk -t utf-8 OLED/oled.c -o OLED/oled_utf8.c)",
+      "Bash(sed -i 's/\\\\/\\\\/\\\\xe6\\\\x9b\\\\xb4\\\\xe6\\\\x96\\\\xb0\\\\xe6\\\\x98\\\\xbe\\\\xe7\\\\xa4\\\\xba/\\\\/\\\\/ 更新显示/' OLED/oled_utf8.c)",
+      "Bash(sed -i 's/\\\\/\\\\/\\\\xe5\\\\xbe\\\\x97\\\\xe5\\\\x88\\\\xb0\\\\xe5\\\\x81\\\\x8f\\\\xe7\\\\xa7\\\\xbb\\\\xe5\\\\x90\\\\x8e\\\\xe7\\\\x9a\\\\x84\\\\xe5\\\\x80\\\\xbc/\\\\/\\\\/ 得到偏移后的值/' OLED/oled_utf8.c)",
+      "Bash(sed -i 's/\\\\/\\\\/\\\\xe5\\\\x88\\\\x9d\\\\xe5\\\\xa7\\\\x8b\\\\xe5\\\\x8c\\\\x96SSD1306/\\\\/\\\\/ 初始化SSD1306/' OLED/oled_utf8.c)",
+      "Bash(sed -i 's/\\\\/\\\\/\\\\xe4\\\\xbd\\\\xbf\\\\xe8\\\\x83\\\\xbdA\\\\xe7\\\\xab\\\\xaf\\\\xe5\\\\x8f\\\\xa3\\\\xe6\\\\x97\\\\xb6\\\\xe9\\\\x92\\\\x9f/\\\\/\\\\/ 使能A端口时钟/' OLED/oled_utf8.c)"
+    ]
+  }
+}
