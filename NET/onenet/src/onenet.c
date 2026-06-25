@@ -1,17 +1,17 @@
-// µ¥Æ¬»úÍ·ÎÄ¼þ
+// ï¿½ï¿½Æ¬ï¿½ï¿½Í·ï¿½Ä¼ï¿½
 #include "stm32f10x.h"
-// ÍøÂçÉè±¸
+// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 #include "esp8266.h"
 
-// ÔÆÆ½Ì¨
+// ï¿½ï¿½Æ½Ì¨
 #include "onenet.h"
 #include "mqttkit.h"
 
-// ±à½âÂë
+// ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "base64.h"
 #include "hmac_sha1.h"
 
-// °å¼¶ÍâÉè
+// ï¿½å¼¶ï¿½ï¿½ï¿½ï¿½
 #include "usart.h"
 #include "delay.h"
 #include "LED.h"
@@ -19,7 +19,7 @@
 #include "Servo.h"
 #include "LED.h"
 
-// C¿â
+// Cï¿½ï¿½
 #include <string.h>
 #include <stdio.h>
 
@@ -118,22 +118,22 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 
 	size_t olen = 0;
 
-	char sign_buf[64];						// ´æ·ÅHMAC-SHA1ºóµÄBase64Ç©Ãû£¬ÔÙ×öURL±àÂë
-	char hmac_sha1_buf[64];					// HMAC-SHA1½á¹û
-	char access_key_base64[64];				// ´æ·Åaccess_keyµÄBase64½âÂë½á¹û
-	char string_for_signature[72];			// ´æ·Åstring_for_signatureÆ´½Ó²ÎÊý£¬ÓÃ×÷HMAC-SHA1µÄkey
+	char sign_buf[64];						// ï¿½ï¿½ï¿½HMAC-SHA1ï¿½ï¿½ï¿½Base64Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½ï¿½ï¿½
+	char hmac_sha1_buf[64];					// HMAC-SHA1ï¿½ï¿½ï¿½
+	char access_key_base64[64];				// ï¿½ï¿½ï¿½access_keyï¿½ï¿½Base64ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	char string_for_signature[72];			// ï¿½ï¿½ï¿½string_for_signatureÆ´ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½HMAC-SHA1ï¿½ï¿½key
 
-	//---------------------------------------------------- ²ÎÊý¼ì²é ----------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ----------------------------------------------------
 		if(ver == (void *)0 || res == (void *)0 || et < 1564562581 || access_key == (void *)0
 			|| authorization_buf == (void *)0 || authorization_buf_len < 120)
 			return 1;
 
-	//---------------------------------------------------- ¶Ôaccess_key½øÐÐBase64½âÂë ----------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½access_keyï¿½ï¿½ï¿½ï¿½Base64ï¿½ï¿½ï¿½ï¿½ ----------------------------------------------------
 		memset(access_key_base64, 0, sizeof(access_key_base64));
 		BASE64_Decode((unsigned char *)access_key_base64, sizeof(access_key_base64), &olen, (unsigned char *)access_key, strlen(access_key));
 		//UsartPrintf(USART_DEBUG, "access_key_base64: %s\r\n", access_key_base64);
 
-	//---------------------------------------------------- Æ´½Óstring_for_signature -----------------------------------------------------
+	//---------------------------------------------------- Æ´ï¿½ï¿½string_for_signature -----------------------------------------------------
 		memset(string_for_signature, 0, sizeof(string_for_signature));
 		if(flag)
 			snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s\n%s", et, METHOD, res, ver);
@@ -141,7 +141,7 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 			snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s/devices/%s\n%s", et, METHOD, res, dev_name, ver);
 		//UsartPrintf(USART_DEBUG, "string_for_signature: %s\r\n", string_for_signature);
 
-	//---------------------------------------------------- ¼ÆËãHMAC-SHA1 --------------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½ï¿½ï¿½HMAC-SHA1 --------------------------------------------------------
 		memset(hmac_sha1_buf, 0, sizeof(hmac_sha1_buf));
 
 		hmac_sha1((unsigned char *)access_key_base64, strlen(access_key_base64),
@@ -150,16 +150,16 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 
 		//UsartPrintf(USART_DEBUG, "hmac_sha1_buf: %s\r\n", hmac_sha1_buf);
 
-	//---------------------------------------------------- ¶ÔHMAC-SHA1½á¹û½øÐÐBase64±àÂë ------------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½HMAC-SHA1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Base64ï¿½ï¿½ï¿½ï¿½ ------------------------------------------------------
 		olen = 0;
 		memset(sign_buf, 0, sizeof(sign_buf));
 		BASE64_Encode((unsigned char *)sign_buf, sizeof(sign_buf), &olen, (unsigned char *)hmac_sha1_buf, strlen(hmac_sha1_buf));
 
-	//---------------------------------------------------- ¶ÔBase64±àÂëºóµÄÇ©Ãû×öURL±àÂë ----------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½Base64ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½ï¿½ï¿½ ----------------------------------------------------
 		OTA_UrlEncode(sign_buf);
 		//UsartPrintf(USART_DEBUG, "sign_buf: %s\r\n", sign_buf);
 
-	//---------------------------------------------------- Éú³ÉToken --------------------------------------------------------------------
+	//---------------------------------------------------- ï¿½ï¿½ï¿½ï¿½Token --------------------------------------------------------------------
 		if(flag)
 			snprintf(authorization_buf, authorization_buf_len, "version=%s&res=products%%2F%s&et=%d&method=%s&sign=%s", ver, res, et, METHOD, sign_buf);
 		else
@@ -178,7 +178,7 @@ _Bool OneNET_RegisterDevice(void)
 	unsigned short send_len = 11 + strlen(DEVICE_NAME);
 	char *send_ptr = NULL, *data_ptr = NULL;
 
-	char authorization_buf[144];													// ÈÏÖ¤key
+	char authorization_buf[144];													// ï¿½ï¿½Ö¤key
 
 	send_ptr = malloc(send_len + 240);
 	if(send_ptr == NULL)
@@ -217,7 +217,7 @@ _Bool OneNET_RegisterDevice(void)
 	}
 	*/
 
-	data_ptr = (char *)ESP8266_GetIPD(250);							// »ñÈ¡Æ½Ì¨·µ»ØÊý¾Ý
+	data_ptr = (char *)ESP8266_GetIPD(250);							// ï¿½ï¿½È¡Æ½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	if(data_ptr)
 	{
@@ -247,7 +247,7 @@ _Bool OneNET_RegisterDevice(void)
 _Bool OneNet_DevLink(void)
 {
 
-	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};					// ¶¨ÒåMQTT°ü
+	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};					// ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½
 
 	unsigned char *dataPtr;
 
@@ -264,29 +264,29 @@ _Bool OneNet_DevLink(void)
 
 	if(MQTT_PacketConnect(PROID, authorization_buf, DEVICE_NAME, 256, 1, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{
-		ESP8266_SendData(mqttPacket._data, mqttPacket._len);			// ·¢ËÍMQTTÁ¬½Ó°ü
+		ESP8266_SendData(mqttPacket._data, mqttPacket._len);			// ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½ï¿½Ó°ï¿½
 
-		dataPtr = ESP8266_GetIPD(250);									// »ñÈ¡Æ½Ì¨·µ»ØÊý¾Ý
+		dataPtr = ESP8266_GetIPD(250);									// ï¿½ï¿½È¡Æ½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(dataPtr != NULL)
 		{
 			if(MQTT_UnPacketRecv(dataPtr) == MQTT_PKT_CONNACK)
 			{
 				switch(MQTT_UnPacketConnectAck(dataPtr))
 				{
-					case 0:UsartPrintf(USART_DEBUG, "Tips:	Á¬½Ó³É¹¦\r\n");status = 0;break;
-
-					case 1:UsartPrintf(USART_DEBUG, "WARN:	Á¬½Ó±»¾Ü¾ø£¬Ð­Òé°æ±¾´íÎó\r\n");break;
-					case 2:UsartPrintf(USART_DEBUG, "WARN:	Á¬½Ó±»¾Ü¾ø£¬ÎÞÐ§µÄclientid\r\n");break;
-					case 3:UsartPrintf(USART_DEBUG, "WARN:	Á¬½Ó±»¾Ü¾ø£¬·þÎñÆ÷²»¿ÉÓÃ\r\n");break;
-					case 4:UsartPrintf(USART_DEBUG, "WARN:	Á¬½Ó±»¾Ü¾ø£¬´íÎóµÄÓÃ»§Ãû»òÃÜÂë\r\n");break;
-					case 5:UsartPrintf(USART_DEBUG, "WARN:	Á¬½Ó±»¾Ü¾ø£¬Î´¾­ÊÚÈ¨(¿ÉÄÜÊÇtokenÒì³£)\r\n");break;
-
-					default:UsartPrintf(USART_DEBUG, "ERR:	Á¬½Ó±»¾Ü¾ø£¬Î´Öª´íÎó\r\n");break;
+					case 0:UsartPrintf(USART_DEBUG, "Tips:	ï¿½ï¿½ï¿½Ó³É¹ï¿½\r\n");status = 0;break;
+					
+					case 1:UsartPrintf(USART_DEBUG, "WARN:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½Ð­ï¿½ï¿½ï¿½ï¿½ï¿½\r\n");break;
+					case 2:UsartPrintf(USART_DEBUG, "WARN:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ç·ï¿½ï¿½ï¿½clientid\r\n");break;
+					case 3:UsartPrintf(USART_DEBUG, "WARN:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½\r\n");break;
+					case 4:UsartPrintf(USART_DEBUG, "WARN:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\r\n");break;
+					case 5:UsartPrintf(USART_DEBUG, "WARN:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½tokenï¿½Ç·ï¿½)\r\n");break;
+					
+					default:UsartPrintf(USART_DEBUG, "ERR:	ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½Î´Öªï¿½ï¿½ï¿½ï¿½\r\n");break;
 				}
 			}
 		}
 
-		MQTT_DeleteBuffer(&mqttPacket);								// ÊÍ·ÅÄÚ´æ
+		MQTT_DeleteBuffer(&mqttPacket);								// ï¿½Í·ï¿½ï¿½Ú´ï¿½
 	}
 	else
 		UsartPrintf(USART_DEBUG, "WARN:	MQTT_PacketConnect Failed\r\n");
@@ -319,53 +319,53 @@ unsigned char OneNet_FillBuf(char *buf)
 	strcat(buf, text);
 
 	memset(text, 0, sizeof(text));
-	sprintf(text, "\"voltage\":{\"value\":%d.%02d},", int_part, dec_part);
+	sprintf(text, "\"voltage\":{\"value\":%.2f},", battery_voltage);
 	strcat(buf, text);
 
 	memset(text, 0, sizeof(text));
 	switch(Mode.car_status)
 	{
-		case 0: sprintf(text, "\"car_status\":{\"value\":\"Í£Ö¹\"},"); break;
-		case 1: sprintf(text, "\"car_status\":{\"value\":\"Ç°½ø\"},"); break;
-		case 2: sprintf(text, "\"car_status\":{\"value\":\"ºóÍË\"},"); break;
-		case 3: sprintf(text, "\"car_status\":{\"value\":\"×ó×ª\"},"); break;
-		case 4: sprintf(text, "\"car_status\":{\"value\":\"ÓÒ×ª\"},"); break;
-		case 5: sprintf(text, "\"car_status\":{\"value\":\"Ë³Ê±ÕëÐý×ª\"},"); break;
-		case 6: sprintf(text, "\"car_status\":{\"value\":\"ÄæÊ±ÕëÐý×ª\"},"); break;
-		case 7: sprintf(text, "\"car_status\":{\"value\":\"×Ô¶¯±ÜÕÏ\"},"); break;
-		case 8: sprintf(text, "\"car_status\":{\"value\":\"×Ô¶¯Ñ­¼£\"},"); break;
-		default: sprintf(text, "\"car_status\":{\"value\":\"Ö¸Áî´íÎó\"},"); break;
+		case 0: sprintf(text, "\"car_status\":{\"value\":\"stop\"},"); break;
+		case 1: sprintf(text, "\"car_status\":{\"value\":\"forward\"},"); break;
+		case 2: sprintf(text, "\"car_status\":{\"value\":\"backward\"},"); break;
+		case 3: sprintf(text, "\"car_status\":{\"value\":\"turn_left\"},"); break;
+		case 4: sprintf(text, "\"car_status\":{\"value\":\"turn_right\"},"); break;
+		case 5: sprintf(text, "\"car_status\":{\"value\":\"clockwise_turn\"},"); break;
+		case 6: sprintf(text, "\"car_status\":{\"value\":\"counterclockwise_turn\"},"); break;
+		case 7: sprintf(text, "\"car_status\":{\"value\":\"auto_avoid\"},"); break;
+		case 8: sprintf(text, "\"car_status\":{\"value\":\"auto_track\"},"); break;
+		default: sprintf(text, "\"car_status\":{\"value\":\"unknown\"},"); break;
 	}
 	strcat(buf, text);
 
 	memset(text, 0, sizeof(text));
 	switch(LED1.LED1_Status)
 	{
-		case 0: sprintf(text, "\"LED1\":{\"value\":\"¹Ø±Õ\"},"); break;
-		case 1: sprintf(text, "\"LED1\":{\"value\":\"¿ªÆô\"},"); break;
-		case 2: sprintf(text, "\"LED1\":{\"value\":\"ÉÁË¸\"},"); break;
-		default: sprintf(text, "\"LED1\":{\"value\":\"Ö¸Áî´íÎó\"},"); break;
+		case 0: sprintf(text, "\"LED1\":{\"value\":\"off\"},"); break;
+		case 1: sprintf(text, "\"LED1\":{\"value\":\"on\"},"); break;
+		case 2: sprintf(text, "\"LED1\":{\"value\":\"flash\"},"); break;
+		default: sprintf(text, "\"LED1\":{\"value\":\"unknown\"},"); break;
 	}
 	strcat(buf, text);
 
 	memset(text, 0, sizeof(text));
 	switch(LED2.LED2_Status)
 	{
-		case 0: sprintf(text, "\"LED2\":{\"value\":\"¹Ø±Õ\"},"); break;
-		case 1: sprintf(text, "\"LED2\":{\"value\":\"¿ªÆô\"},"); break;
-		case 2: sprintf(text, "\"LED2\":{\"value\":\"ÉÁË¸\"},"); break;
-		case 3: sprintf(text, "\"LED2\":{\"value\":\"ÓÒµÆ¿ªÆô\"},"); break;
-		case 4: sprintf(text, "\"LED2\":{\"value\":\"×óµÆ¿ªÆô\"},"); break;
-		default: sprintf(text, "\"LED2\":{\"value\":\"Ö¸Áî´íÎó\"},"); break;
+		case 0: sprintf(text, "\"LED2\":{\"value\":\"off\"},"); break;
+		case 1: sprintf(text, "\"LED2\":{\"value\":\"on\"},"); break;
+		case 2: sprintf(text, "\"LED2\":{\"value\":\"flash\"},"); break;
+		case 3: sprintf(text, "\"LED2\":{\"value\":\"right_turn\"},"); break;
+		case 4: sprintf(text, "\"LED2\":{\"value\":\"left_turn\"},"); break;
+		default: sprintf(text, "\"LED2\":{\"value\":\"unknown\"},"); break;
 	}
 	strcat(buf, text);
 
 	memset(text, 0, sizeof(text));
 	switch(Hummer.Hummer_Status)
 	{
-		case 0: sprintf(text, "\"hummer\":{\"value\":\"¹Ø±Õ\"},"); break;
-		case 1: sprintf(text, "\"hummer\":{\"value\":\"¿ªÆô\"},"); break;
-		default: sprintf(text, "\"hummer\":{\"value\":\"Ö¸Áî´íÎó\"},"); break;
+		case 0: sprintf(text, "\"hummer\":{\"value\":\"off\"},"); break;
+		case 1: sprintf(text, "\"hummer\":{\"value\":\"on\"},"); break;
+		default: sprintf(text, "\"hummer\":{\"value\":\"unknown\"},"); break;
 	}
 	strcat(buf, text);
 
@@ -408,9 +408,9 @@ unsigned char OneNet_FillBuf(char *buf)
 void OneNet_SendData(void)
 {
 
-	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};												// ¶¨ÒåMQTT°ü
+	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};												// ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½
 
-	char buf[256];
+	char buf[512];
 
 	short body_len = 0, i = 0;
 
@@ -418,17 +418,17 @@ void OneNet_SendData(void)
 
 	memset(buf, 0, sizeof(buf));
 
-	body_len = OneNet_FillBuf(buf);																	// Ìî³äJSONÊý¾Ýµ½»º³åÇø
+	body_len = OneNet_FillBuf(buf);																	// ï¿½ï¿½ï¿½JSONï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	if(body_len)
 	{
 		UsartPrintf(USART_DEBUG, "Sending JSON: %s\r\n", buf);
-		if(MQTT_PacketSaveData(PROID, DEVICE_NAME, body_len, (int8 *)buf, &mqttPacket) == 0)		// ´ò°ü
+		if(MQTT_PacketSaveData(PROID, DEVICE_NAME, body_len, (int8 *)buf, &mqttPacket) == 0)		// ï¿½ï¿½ï¿½
 		{
-			ESP8266_SendData(mqttPacket._data, mqttPacket._len);									// Í¨¹ýESP8266·¢ËÍ
+			ESP8266_SendData(mqttPacket._data, mqttPacket._len);									// Í¨ï¿½ï¿½ESP8266ï¿½ï¿½ï¿½ï¿½
 			UsartPrintf(USART_DEBUG, "Send %d Bytes\r\n", mqttPacket._len);
 
-			MQTT_DeleteBuffer(&mqttPacket);															// ÊÍ·ÅÄÚ´æ
+			MQTT_DeleteBuffer(&mqttPacket);															// ï¿½Í·ï¿½ï¿½Ú´ï¿½
 		}
 		else
 			UsartPrintf(USART_DEBUG, "WARN:	MQTT_PacketSaveData Failed\r\n");
@@ -440,15 +440,15 @@ void OneNet_SendData(void)
 void OneNET_Publish(const char *topic, const char *msg)
 {
 
-	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						// ¶¨ÒåMQTT°ü
+	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						// ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½
 
 	UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
 
 	if(MQTT_PacketPublish(MQTT_PUBLISH_ID, topic, msg, strlen(msg), MQTT_QOS_LEVEL0, 0, 1, &mqtt_packet) == 0)
 	{
-		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					// Í¨¹ýESP8266·¢ËÍÊý¾Ý
+		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					// Í¨ï¿½ï¿½ESP8266ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		MQTT_DeleteBuffer(&mqtt_packet);										// ÊÍ·ÅÄÚ´æ
+		MQTT_DeleteBuffer(&mqtt_packet);										// ï¿½Í·ï¿½ï¿½Ú´ï¿½
 	}
 
 }
@@ -456,7 +456,7 @@ void OneNET_Publish(const char *topic, const char *msg)
 void OneNET_Subscribe(void)
 {
 
-	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						// ¶¨ÒåMQTT°ü
+	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						// ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½
 
 	char topic_buf[56];
 	const char *topic = topic_buf;
@@ -469,7 +469,7 @@ void OneNET_Subscribe(void)
 
 	if(MQTT_PacketSubscribe(MQTT_SUBSCRIBE_ID, MQTT_QOS_LEVEL0, &topic, 1, &mqtt_packet) == 0)
 	{
-		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);    // Í¨¹ýESP8266·¢ËÍ¶©ÔÄÇëÇó
+		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);    // Í¨ï¿½ï¿½ESP8266ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		DelayXms(200);
 		dataPtr = ESP8266_GetIPD(250);
@@ -492,7 +492,7 @@ void OneNET_Subscribe(void)
 			UsartPrintf(USART_DEBUG, "ERR:	No SUBACK received\r\n");
 		}
 
-		MQTT_DeleteBuffer(&mqtt_packet);										// ÊÍ·ÅÄÚ´æ
+		MQTT_DeleteBuffer(&mqtt_packet);										// ï¿½Í·ï¿½ï¿½Ú´ï¿½
 	}
 
 }
@@ -528,7 +528,7 @@ void OneNet_RevPro(unsigned char *cmd)
 	type = MQTT_UnPacketRecv(cmd);
 	switch(type)
 	{
-		case MQTT_PKT_PUBLISH:						// ÊÕµ½PublishÏûÏ¢
+		case MQTT_PKT_PUBLISH:						
 
 			result = MQTT_UnPacketPublish(cmd, &cmdid_topic, &topic_len, &req_payload, &req_len, &qos, &pkt_id);
 			if(result == 0)
@@ -539,7 +539,7 @@ void OneNet_RevPro(unsigned char *cmd)
 																		cmdid_topic, topic_len, req_payload, req_len);
 
 				raw_json = cJSON_Parse(req_payload);
-				// OneNetÎïÄ£ÐÍ¸ñÊ½£º×îÍâ²ã°üº¬params¶ÔÏó£¬paramsÀï°üº¬¸÷ÊôÐÔ
+
 				if(raw_json == NULL)
 				{
 					UsartPrintf(USART_DEBUG, "ERR: JSON Parse Failed\r\n");
@@ -555,10 +555,8 @@ void OneNet_RevPro(unsigned char *cmd)
 					}
 					break;
 				}
-				// ½âÎöOneNetÎïÄ£ÐÍJSON£º»ñÈ¡params¶ÔÏó£¬ÔÙ´ÓparamsÖÐÌáÈ¡¸÷ÊôÐÔÖµ
-				params_json = cJSON_GetObjectItem(raw_json,"params");
 
-				// ¼ì²éparams¶ÔÏóÊÇ·ñ´æÔÚ
+				params_json = cJSON_GetObjectItem(raw_json,"params");
 				if(params_json == NULL)
 				{
 					UsartPrintf(USART_DEBUG, "ERR: params not found\r\n");
@@ -566,19 +564,19 @@ void OneNet_RevPro(unsigned char *cmd)
 					break;
 				}
 
-			//UsartPrintf(USART2, "ÊÕµ½µÄJSON: %s\r\n", req_payload);
+
 			if (params_json != NULL)
 			{
 				cJSON *LED1_json = cJSON_GetObjectItem(params_json, "LED1");
 				if (LED1_json != NULL && LED1_json->valuestring != NULL)
 				{
-					if(strcmp(LED1_json->valuestring, "¿ªÆô") == 0)
+					if(strcmp(LED1_json->valuestring, "on") == 0)
 					{
 						LED_Front_ON();
 						LED1.LED1_Status=1;
 						turn_state = 7;
 					}
-					else if(strcmp(LED1_json->valuestring, "¹Ø±Õ") == 0)
+					else if(strcmp(LED1_json->valuestring, "off") == 0)
 					{
 						LED_Front_OFF();
 						LED1.LED1_Status=0;
@@ -592,31 +590,31 @@ void OneNet_RevPro(unsigned char *cmd)
 				cJSON *LED2_json = cJSON_GetObjectItem(params_json, "LED2");
 				if (LED2_json != NULL && LED2_json->valuestring != NULL)
 				{
-					if(strcmp(LED2_json->valuestring, "¿ªÆô") == 0)
+					if(strcmp(LED2_json->valuestring, "on") == 0)
 					{
 						LED_Left_ON(); LED_Right_ON();
 						LED2.LED2_Status=1;
 						turn_state = 3;
 					}
-					else if(strcmp(LED2_json->valuestring, "¹Ø±Õ") == 0)
+					else if(strcmp(LED2_json->valuestring, "off") == 0)
 					{
 						LED_Left_OFF(); LED_Right_OFF();
 						LED2.LED2_Status=0;
 						turn_state = 8;
 					}
-					else if(strcmp(LED2_json->valuestring, "ÓÒµÆ´ò¿ª") == 0)
+					else if(strcmp(LED2_json->valuestring, "right_turn") == 0)
 					{
 						LED_Right_Turn(); LED_Left_OFF();
 						LED2.LED2_Status=3;
 						turn_state = 2;
 					}
-					else if(strcmp(LED2_json->valuestring, "×óµÆ´ò¿ª") == 0)
+					else if(strcmp(LED2_json->valuestring, "left_turn") == 0)
 					{
 						LED_Left_Turn(); LED_Right_OFF();
 						LED2.LED2_Status=4;
 						turn_state = 1;
 					}
-					else if(strcmp(LED2_json->valuestring, "ÉÁË¸") == 0)
+					else if(strcmp(LED2_json->valuestring, "flash") == 0)
 					{
 						LED_Right_Turn();LED_Left_Turn();
 						LED2.LED2_Status=2;
@@ -630,12 +628,12 @@ void OneNet_RevPro(unsigned char *cmd)
 				cJSON *hummer_json = cJSON_GetObjectItem(params_json, "hummer");
 				if (hummer_json != NULL && hummer_json->valuestring != NULL)
 				{
-					if(strcmp(hummer_json->valuestring, "¿ªÆô") == 0)
+					if(strcmp(hummer_json->valuestring, "on") == 0)
 					{
 						hummer_flag=1;
 						Hummer.Hummer_Status=1;
 					}
-					else if(strcmp(hummer_json->valuestring, "¹Ø±Õ") == 0)
+					else if(strcmp(hummer_json->valuestring, "off") == 0)
 					{
 						hummer_flag=0;near_flag=0;battery_voltage_flag=0;
 						Hummer.Hummer_Status=0;
@@ -648,47 +646,47 @@ void OneNet_RevPro(unsigned char *cmd)
 				cJSON *car_status_json = cJSON_GetObjectItem(params_json, "car_status");
 				if (car_status_json != NULL && car_status_json->valuestring != NULL)
 				{
-					if(strcmp(car_status_json->valuestring,"Ç°½ø") == 0)
+					if(strcmp(car_status_json->valuestring,"forward") == 0)
 					{
 						RxData = 0X01;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"Í£Ö¹") == 0)
+					else if(strcmp(car_status_json->valuestring,"stop") == 0)
 					{
 						RxData = 0X00;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"ÏòÓÒ×ª") == 0)
+					else if(strcmp(car_status_json->valuestring,"turn_left") == 0)
 					{
 						RxData = 0X02;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"Ïò×ó×ª") == 0)
+					else if(strcmp(car_status_json->valuestring,"turn_right") == 0)
 					{
 						RxData = 0X03;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"Ë³Ê±ÕëÐý×ª") == 0)
+					else if(strcmp(car_status_json->valuestring,"clockwise_turn") == 0)
 					{
 						RxData = 0X04;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"ÄæÊ±ÕëÐý×ª") == 0)
+					else if(strcmp(car_status_json->valuestring,"counterclockwise_turn") == 0)
 					{
 						RxData = 0X05;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"ºóÍË") == 0)
+					else if(strcmp(car_status_json->valuestring,"backward") == 0)
 					{
 						RxData = 0X06;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"Ñ­¼£") == 0)
+					else if(strcmp(car_status_json->valuestring,"auto_track") == 0)
 					{
 						RxData = 0X07;
 						xQueueSend(BlueToothQueue,&RxData,0);
 					}
-					else if(strcmp(car_status_json->valuestring,"±ÜÕÏ") == 0)
+					else if(strcmp(car_status_json->valuestring,"backward") == 0)
 					{
 						RxData = 0X08;
 						xQueueSend(BlueToothQueue,&RxData,0);
@@ -697,14 +695,14 @@ void OneNet_RevPro(unsigned char *cmd)
 				}
 
 			}
-				cJSON_Delete(raw_json);// ÊÍ·Å¾ÉµÄ JSON ¶ÔÏó£¬±ÜÃâÄÚ´æÐ¹Â©
+				cJSON_Delete(raw_json);// ï¿½Í·Å¾Éµï¿½ JSON ï¿½ï¿½ï¿½ó£¬±ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ð¹Â©
 
 				{
-					char resp_buf[64];	// ´æ·ÅÏìÓ¦ÏûÏ¢
-					char resp_topic[80];// ´æ·ÅÏìÓ¦Ö÷Ìâ
-					cJSON *id_json;     // »ñÈ¡ÏûÏ¢ID
+					char resp_buf[64];	// ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ï¢
+					char resp_topic[80];// ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
+					cJSON *id_json;     // ï¿½ï¿½È¡ï¿½ï¿½Ï¢ID
 
-					// ÖØÐÂ½âÎöJSON»ñÈ¡id
+					// ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½JSONï¿½ï¿½È¡id
 					raw_json = cJSON_Parse(req_payload);
 					if(raw_json != NULL)
 					{
@@ -734,29 +732,29 @@ void OneNet_RevPro(unsigned char *cmd)
 			}
 			break;
 
-//					data_ptr = strstr(cmdid_topic, "request/");									// ²éÕÒcmdid
+//					data_ptr = strstr(cmdid_topic, "request/");									// ï¿½ï¿½ï¿½ï¿½cmdid
 //					{
 //						char topic_buf[80], cmdid[40];
 //
 //						data_ptr = strchr(data_ptr, '/');
 //						data_ptr++;
 //
-//						memcpy(cmdid, data_ptr, 36);											// »ñÈ¡cmdid
+//						memcpy(cmdid, data_ptr, 36);											// ï¿½ï¿½È¡cmdid
 //						cmdid[36] = 0;
 //
 //						snprintf(topic_buf, sizeof(topic_buf), "$sys/%s/%s/cmd/response/%s",
 //											PROID, DEVICE_NAME, cmdid);
-//						OneNET_Publish(topic_buf, "ojbk");										// »Ø¸´Ö¸Áî
+//						OneNET_Publish(topic_buf, "ojbk");										// ï¿½Ø¸ï¿½Ö¸ï¿½ï¿½
 //					}
 
-		case MQTT_PKT_PUBACK:										// ÊÕµ½PublishÏûÏ¢µÄAck»Ø¸´
+		case MQTT_PKT_PUBACK:										// ï¿½Õµï¿½Publishï¿½ï¿½Ï¢ï¿½ï¿½Ackï¿½Ø¸ï¿½
 
 			if(MQTT_UnPacketPublishAck(cmd) == 0)
 				UsartPrintf(USART_DEBUG, "Tips:	MQTT Publish Send OK\r\n");
 
 		break;
 
-		case MQTT_PKT_SUBACK:									// ÊÕµ½SubscribeµÄAck»Ø¸´
+		case MQTT_PKT_SUBACK:									// ï¿½Õµï¿½Subscribeï¿½ï¿½Ackï¿½Ø¸ï¿½
 
 
 			if(MQTT_UnPacketSubscribe(cmd) == 0)
@@ -771,25 +769,25 @@ void OneNet_RevPro(unsigned char *cmd)
 		break;
 	}
 
-	ESP8266_Clear();			// Çå¿Õ»º³åÇø
+	ESP8266_Clear();			
 
 	if(result == -1)
 		return;
 
-//	dataPtr = strchr(req_payload, ':');					// ²éÕÒ':'
+//	dataPtr = strchr(req_payload, ':');					
 
-//	if(dataPtr != NULL && result != -1)					// ²éÕÒ½á¹ûÅÐ¶Ï
+//	if(dataPtr != NULL && result != -1)					
 //	{
 //		dataPtr++;
 //
-//		while(*dataPtr >= '0' && *dataPtr <= '9')		// ½«Êý×Ö×Ö·ûÖð¸öÈ¡³ö£¬×é³ÉÕûÊý
+//		while(*dataPtr >= '0' && *dataPtr <= '9')		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //		{
 //		{
 //			numBuf[num++] = *dataPtr++;
 //		}
 //		numBuf[num] = 0;
 //
-//		num = atoi((const char *)numBuf);				// ×ª»»³ÉÕûÊý
+//		num = atoi((const char *)numBuf);				// ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	}
 
 
